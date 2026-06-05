@@ -39,6 +39,42 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
           IconButton(
+            icon: const Icon(Icons.auto_awesome),
+            tooltip: 'Seed Dummy Posts',
+            onPressed: () async {
+              final user = context.read<AuthProvider>().user;
+              if (user == null) return;
+              try {
+                final firestore = FirebaseFirestore.instance;
+                final now = DateTime.now().millisecondsSinceEpoch;
+                await firestore.collection('posts').add({
+                  'userId': user.uid,
+                  'userDisplayName': user.displayName ?? 'Test User',
+                  'userPhotoURL': user.photoURL,
+                  'content': 'Hello world! This is my first pre-loaded post for the internship project. Really excited to build this Social Connect app!',
+                  'imageURL': null,
+                  'likesCount': 0,
+                  'commentsCount': 0,
+                  'createdAt': now,
+                });
+                await firestore.collection('posts').add({
+                  'userId': user.uid,
+                  'userDisplayName': user.displayName ?? 'Test User',
+                  'userPhotoURL': user.photoURL,
+                  'content': 'Just testing the responsiveness and real-time feed updates. Everything looks blazing fast! 🚀',
+                  'imageURL': null,
+                  'likesCount': 0,
+                  'commentsCount': 0,
+                  'createdAt': now - 60000,
+                });
+                context.read<PostsProvider>().fetchPosts(user.uid);
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Dummy posts seeded!')));
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed: $e')));
+              }
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () => context.read<AuthProvider>().signOut(),
           )
