@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'screens/auth/login_screen.dart';
+import 'screens/splash_screen.dart';
 import 'screens/main/home_screen.dart';
 import 'screens/main/search_screen.dart';
 import 'screens/profile/profile_screen.dart';
@@ -51,59 +53,46 @@ class SocialConnectApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => PostsProvider()),
       ],
-      child: Consumer<AuthProvider>(
-        builder: (context, authProvider, child) {
-          if (authProvider.isLoading) {
-            return const MaterialApp(
-              home: Scaffold(body: Center(child: CircularProgressIndicator())),
-            );
-          }
-
-          return MaterialApp(
-            title: 'Social Connect',
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              useMaterial3: true,
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: const Color(0xFF6366F1), // Indigo 500
-                brightness: Brightness.dark,
-                background: const Color(0xFF0F172A), // Slate 900
-                surface: const Color(0xFF1E293B), // Slate 800
-              ),
-              scaffoldBackgroundColor: const Color(0xFF0F172A),
-              textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme),
-              appBarTheme: AppBarTheme(
-                backgroundColor: const Color(0xFF0F172A), // Match background
-                elevation: 0,
-                centerTitle: true,
-                titleTextStyle: GoogleFonts.outfit(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-                iconTheme: const IconThemeData(color: Colors.white),
-              ),
-              cardTheme: CardTheme(
-                color: const Color(0xFF1E293B),
-                elevation: 4,
-                shadowColor: Colors.black45,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              ),
-              elevatedButtonTheme: ElevatedButtonThemeData(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF6366F1),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
-                  textStyle: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 16),
-                ),
-              ),
+      child: MaterialApp(
+        title: 'Social Connect',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color(0xFF6366F1), // Indigo 500
+            brightness: Brightness.dark,
+            surface: const Color(0xFF0F172A), // Slate 900
+          ),
+          scaffoldBackgroundColor: const Color(0xFF0F172A),
+          textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme),
+          appBarTheme: AppBarTheme(
+            backgroundColor: const Color(0xFF0F172A), // Match background
+            elevation: 0,
+            centerTitle: true,
+            titleTextStyle: GoogleFonts.outfit(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
-            home: authProvider.isAuthenticated
-                ? const MainScreen()
-                : const LoginScreen(),
-          );
-        },
+            iconTheme: const IconThemeData(color: Colors.white),
+          ),
+          cardTheme: CardThemeData(
+            color: const Color(0xFF1E293B),
+            elevation: 4,
+            shadowColor: Colors.black45,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF6366F1),
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
+              textStyle: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 16),
+            ),
+          ),
+        ),
+        home: const SplashScreen(),
       ),
     );
   }
