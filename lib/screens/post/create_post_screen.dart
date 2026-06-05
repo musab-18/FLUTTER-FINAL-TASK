@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,7 +17,7 @@ class CreatePostScreen extends StatefulWidget {
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
   final _contentController = TextEditingController();
-  File? _selectedImage;
+  XFile? _selectedImage;
   bool _isLoading = false;
 
   Future<void> _pickImage() async {
@@ -24,7 +25,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        _selectedImage = File(pickedFile.path);
+        _selectedImage = pickedFile;
       });
     }
   }
@@ -44,7 +45,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
       if (_selectedImage != null) {
         final ref = FirebaseStorage.instance.ref('posts/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.jpg');
-        await ref.putFile(_selectedImage!);
+        if (kIsWeb) {
+          await ref.putData(await _selectedImage!.readAsBytes());
+        } else {
+          await ref.putFile(File(_selectedImage!.path));
+        }
         imageURL = await ref.getDownloadURL();
       }
 
@@ -111,7 +116,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             if (_selectedImage != null)
               Stack(
                 children: [
-                  Image.file(_selectedImage!, height: 200, width: double.infinity, fit: BoxFit.cover),
+                  kIsWeb
+                      ? Image.network(_selectedImage!.path, height: 200, width: double.infinity, fit: BoxFit.cover)
+                      : Image.file(File(_selectedImage!.path), height: 200, width: double.infinity, fit: BoxFit.cover),
                   Positioned(
                     right: 8,
                     top: 8,
