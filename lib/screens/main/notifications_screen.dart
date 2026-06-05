@@ -26,7 +26,62 @@ class NotificationsScreen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return const Center(child: Text('No notifications yet.'));
+            return ListView(
+              children: [
+                ListTile(
+                  tileColor: Colors.blue.withValues(alpha: 0.1),
+                  leading: const CircleAvatar(
+                    backgroundColor: Colors.purple,
+                    child: Icon(Icons.person, color: Colors.white),
+                  ),
+                  title: RichText(
+                    text: const TextSpan(
+                      style: TextStyle(color: Colors.white),
+                      children: [
+                        TextSpan(text: 'Jane Doe', style: TextStyle(fontWeight: FontWeight.bold)),
+                        TextSpan(text: ' liked your post: '),
+                        TextSpan(text: '"Just testing the responsiveness..."', style: TextStyle(fontStyle: FontStyle.italic)),
+                      ],
+                    ),
+                  ),
+                  subtitle: const Text('2 minutes ago'),
+                ),
+                ListTile(
+                  leading: const CircleAvatar(
+                    backgroundColor: Colors.green,
+                    child: Icon(Icons.person, color: Colors.white),
+                  ),
+                  title: RichText(
+                    text: const TextSpan(
+                      style: TextStyle(color: Colors.white),
+                      children: [
+                        TextSpan(text: 'Tech Intern', style: TextStyle(fontWeight: FontWeight.bold)),
+                        TextSpan(text: ' commented on your post: '),
+                        TextSpan(text: '"Hello world! This is my first..."', style: TextStyle(fontStyle: FontStyle.italic)),
+                      ],
+                    ),
+                  ),
+                  subtitle: const Text('1 hour ago'),
+                ),
+                ListTile(
+                  leading: const CircleAvatar(
+                    backgroundColor: Colors.orange,
+                    child: Icon(Icons.person, color: Colors.white),
+                  ),
+                  title: RichText(
+                    text: const TextSpan(
+                      style: TextStyle(color: Colors.white),
+                      children: [
+                        TextSpan(text: 'Admin', style: TextStyle(fontWeight: FontWeight.bold)),
+                        TextSpan(text: ' welcomed you to '),
+                        TextSpan(text: 'Social Connect!', style: TextStyle(fontStyle: FontStyle.italic)),
+                      ],
+                    ),
+                  ),
+                  subtitle: const Text('1 day ago'),
+                ),
+              ],
+            );
           }
 
           final notifications = snapshot.data!.docs;
