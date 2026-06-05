@@ -41,27 +41,32 @@ class _SearchScreenState extends State<SearchScreen> {
                   return const Center(child: Text('No users found.'));
                 }
                 final users = snapshot.data!.docs;
-                return ListView.builder(
-                  itemCount: users.length,
-                  itemBuilder: (context, index) {
-                    final data = users[index].data() as Map<String, dynamic>;
-                    final photoURL = data['photoURL'] as String?;
-                    return ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: photoURL != null ? CachedNetworkImageProvider(photoURL) : null,
-                        child: photoURL == null ? const Icon(Icons.person) : null,
-                      ),
-                      title: Text(data['displayName'] ?? 'Unknown User'),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => UserProfileScreen(userId: users[index].id),
+                return Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 600),
+                    child: ListView.builder(
+                      itemCount: users.length,
+                      itemBuilder: (context, index) {
+                        final data = users[index].data() as Map<String, dynamic>;
+                        final photoURL = data['photoURL'] as String?;
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: photoURL != null ? CachedNetworkImageProvider(photoURL) : null,
+                            child: photoURL == null ? const Icon(Icons.person) : null,
                           ),
+                          title: Text(data['displayName'] ?? 'Unknown User'),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => UserProfileScreen(userId: users[index].id),
+                              ),
+                            );
+                          },
                         );
                       },
-                    );
-                  },
+                    ),
+                  ),
                 );
               },
             ),

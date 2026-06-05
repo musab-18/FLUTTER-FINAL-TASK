@@ -53,32 +53,35 @@ class _HomeScreenState extends State<HomeScreen> {
                   await context.read<PostsProvider>().fetchPosts(userId);
                 }
               },
-              child: postsProvider.posts.isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.forum, size: 64, color: Colors.grey),
-                          const SizedBox(height: 16),
-                          const Text('No posts yet', style: TextStyle(fontSize: 18, color: Colors.grey)),
-                          const SizedBox(height: 8),
-                          TextButton.icon(
-                            icon: const Icon(Icons.add),
-                            label: const Text('Be the first to post!'),
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (_) => const CreatePostScreen()));
-                            },
-                          )
-                        ],
-                      ),
-                    )
-                  : ListView.builder(
-                      itemCount: postsProvider.posts.length,
-                      itemBuilder: (context, index) {
-                        final post = postsProvider.posts[index];
-                        return PostCard(post: post);
-                      },
-                    ),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 600),
+                  child: postsProvider.posts.isEmpty
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.forum, size: 64, color: Colors.grey),
+                            const SizedBox(height: 16),
+                            const Text('No posts yet', style: TextStyle(fontSize: 18, color: Colors.grey)),
+                            const SizedBox(height: 8),
+                            TextButton.icon(
+                              icon: const Icon(Icons.add),
+                              label: const Text('Be the first to post!'),
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (_) => const CreatePostScreen()));
+                              },
+                            )
+                          ],
+                        )
+                      : ListView.builder(
+                          itemCount: postsProvider.posts.length,
+                          itemBuilder: (context, index) {
+                            final post = postsProvider.posts[index];
+                            return PostCard(post: post);
+                          },
+                        ),
+                ),
+              ),
             ),
     );
   }
