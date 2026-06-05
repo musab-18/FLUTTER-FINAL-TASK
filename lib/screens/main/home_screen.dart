@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
@@ -49,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 final now = DateTime.now().millisecondsSinceEpoch;
                 await firestore.collection('posts').add({
                   'userId': user.uid,
-                  'userDisplayName': user.displayName ?? 'Test User',
+                  'userDisplayName': user.displayName,
                   'userPhotoURL': user.photoURL,
                   'content': 'Hello world! This is my first pre-loaded post for the internship project. Really excited to build this Social Connect app!',
                   'imageURL': null,
@@ -59,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 });
                 await firestore.collection('posts').add({
                   'userId': user.uid,
-                  'userDisplayName': user.displayName ?? 'Test User',
+                  'userDisplayName': user.displayName,
                   'userPhotoURL': user.photoURL,
                   'content': 'Just testing the responsiveness and real-time feed updates. Everything looks blazing fast! 🚀',
                   'imageURL': null,
