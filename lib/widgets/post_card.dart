@@ -7,8 +7,8 @@ import '../../core/app_theme.dart';
 import '../../models/post_model.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/post_provider.dart';
-import '../profile/user_profile_screen.dart';
-import '../post/comments_screen.dart';
+import '../screens/profile/user_profile_screen.dart';
+import '../screens/post/comments_screen.dart';
 
 class PostCard extends StatefulWidget {
   final PostModel post;

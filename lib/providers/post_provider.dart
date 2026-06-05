@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/post_model.dart';
 import '../models/user_model.dart';
 import '../services/post_service.dart';
+import '../utils/dummy_data.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PostProvider extends ChangeNotifier {
@@ -53,16 +54,26 @@ class PostProvider extends ChangeNotifier {
   }
 
   Future<void> _loadNextPage() async {
-    final query = _postService.getFeedQuery(lastDoc: _lastDoc);
-    final snap = await query.get();
-    if (snap.docs.isEmpty) {
-      _hasMore = false;
-      return;
+    try {
+      final query = _postService.getFeedQuery(lastDoc: _lastDoc);
+      final snap = await query.get();
+      if (snap.docs.isEmpty) {
+        if (_posts.isEmpty) _posts = List.from(DummyData.posts);
+        _hasMore = false;
+        return;
+      }
+      _lastDoc = snap.docs.last;
+      final newPosts = snap.docs.map(PostModel.fromFirestore).toList();
+      _posts.addAll(newPosts);
+      if (snap.docs.length < 10) _hasMore = false;
+    } catch (e) {
+      if (_posts.isEmpty) {
+        _posts = List.from(DummyData.posts);
+        _hasMore = false;
+      } else {
+        rethrow;
+      }
     }
-    _lastDoc = snap.docs.last;
-    final newPosts = snap.docs.map(PostModel.fromFirestore).toList();
-    _posts.addAll(newPosts);
-    if (snap.docs.length < 10) _hasMore = false;
   }
 
   Future<void> refresh() => loadFeed();

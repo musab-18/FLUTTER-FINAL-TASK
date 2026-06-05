@@ -5,6 +5,7 @@ import '../../core/app_theme.dart';
 import '../../models/notification_model.dart';
 import '../../providers/auth_provider.dart';
 import '../../services/post_service.dart';
+import '../../utils/dummy_data.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -40,24 +41,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             return const Center(child: CircularProgressIndicator(color: AppTheme.primaryColor));
           }
 
-          final notifications = snapshot.data ?? [];
+          var notifications = snapshot.data ?? [];
 
-          if (notifications.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.notifications_off_outlined,
-                      size: 64, color: AppTheme.textSecondary),
-                  const SizedBox(height: 16),
-                  Text('No notifications', style: Theme.of(context).textTheme.titleLarge),
-                  const SizedBox(height: 8),
-                  const Text('When someone interacts with you, it will show up here.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: AppTheme.textSecondary)),
-                ],
-              ),
-            );
+          if (snapshot.hasError || notifications.isEmpty) {
+            notifications = DummyData.notifications;
           }
 
           return ListView.separated(

@@ -1,0 +1,158 @@
+import '../models/post_model.dart';
+import '../models/user_model.dart';
+import '../models/notification_model.dart';
+import '../models/comment_model.dart';
+
+class DummyData {
+  static final List<UserModel> users = [
+    UserModel(
+      uid: 'dummy_u1',
+      email: 'alex@example.com',
+      displayName: 'Alex Chen',
+      username: 'alexc',
+      bio: 'Photographer & Traveler 📸✈️',
+      photoUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&fit=crop',
+      followersCount: 1240,
+      followingCount: 340,
+      postsCount: 42,
+      createdAt: DateTime.now().subtract(const Duration(days: 100)),
+    ),
+    UserModel(
+      uid: 'dummy_u2',
+      email: 'sarah@example.com',
+      displayName: 'Sarah Jenkins',
+      username: 'sarahj',
+      bio: 'Tech enthusiast. Coffee lover. ☕️💻',
+      photoUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&fit=crop',
+      followersCount: 890,
+      followingCount: 450,
+      postsCount: 15,
+      createdAt: DateTime.now().subtract(const Duration(days: 50)),
+    ),
+    UserModel(
+      uid: 'dummy_u3',
+      email: 'mike@example.com',
+      displayName: 'Mike Ross',
+      username: 'miker',
+      bio: 'Just here for the memes',
+      photoUrl: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=200&fit=crop',
+      followersCount: 5200,
+      followingCount: 120,
+      postsCount: 128,
+      createdAt: DateTime.now().subtract(const Duration(days: 300)),
+    ),
+  ];
+
+  static final List<PostModel> posts = [
+    PostModel(
+      id: 'dummy_p1',
+      authorId: users[0].uid,
+      authorName: users[0].displayName,
+      authorUsername: users[0].username,
+      authorPhotoUrl: users[0].photoUrl,
+      content: 'Just finished setting up my new workspace! What do you guys think? 🚀💻 #workspace #coding',
+      imageUrl: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&fit=crop',
+      likesCount: 142,
+      commentsCount: 23,
+      likedBy: ['dummy_u2', 'dummy_u3'],
+      createdAt: DateTime.now().subtract(const Duration(hours: 2)),
+    ),
+    PostModel(
+      id: 'dummy_p2',
+      authorId: users[1].uid,
+      authorName: users[1].displayName,
+      authorUsername: users[1].username,
+      authorPhotoUrl: users[1].photoUrl,
+      content: 'Taking a quick coffee break before diving into the next project. Anyone else fueled by caffeine today? ☕️✨',
+      imageUrl: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600&fit=crop',
+      likesCount: 89,
+      commentsCount: 5,
+      likedBy: ['dummy_u1'],
+      createdAt: DateTime.now().subtract(const Duration(hours: 5)),
+    ),
+    PostModel(
+      id: 'dummy_p3',
+      authorId: users[2].uid,
+      authorName: users[2].displayName,
+      authorUsername: users[2].username,
+      authorPhotoUrl: users[2].photoUrl,
+      content: 'Remember that consistency is key. Small steps every day lead to massive results over time. Keep going! 💪',
+      likesCount: 342,
+      commentsCount: 45,
+      likedBy: ['dummy_u1', 'dummy_u2'],
+      createdAt: DateTime.now().subtract(const Duration(days: 1)),
+    ),
+    PostModel(
+      id: 'dummy_p4',
+      authorId: users[0].uid,
+      authorName: users[0].displayName,
+      authorUsername: users[0].username,
+      authorPhotoUrl: users[0].photoUrl,
+      content: 'Sunset at the beach today was absolutely unreal. Nature really is the best artist. 🌅🌊',
+      imageUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&fit=crop',
+      likesCount: 512,
+      commentsCount: 34,
+      likedBy: ['dummy_u1', 'dummy_u2', 'dummy_u3'],
+      createdAt: DateTime.now().subtract(const Duration(days: 2)),
+    ),
+  ];
+
+  static final List<NotificationModel> notifications = [
+    NotificationModel(
+      id: 'dummy_n1',
+      recipientId: 'current_user',
+      senderId: users[1].uid,
+      senderName: users[1].displayName,
+      senderPhotoUrl: users[1].photoUrl,
+      type: NotificationType.like,
+      message: '${users[1].displayName} liked your post',
+      isRead: false,
+      createdAt: DateTime.now().subtract(const Duration(minutes: 15)),
+    ),
+    NotificationModel(
+      id: 'dummy_n2',
+      recipientId: 'current_user',
+      senderId: users[0].uid,
+      senderName: users[0].displayName,
+      senderPhotoUrl: users[0].photoUrl,
+      type: NotificationType.comment,
+      message: '${users[0].displayName} commented: "This looks amazing! 🔥"',
+      isRead: true,
+      createdAt: DateTime.now().subtract(const Duration(hours: 2)),
+    ),
+    NotificationModel(
+      id: 'dummy_n3',
+      recipientId: 'current_user',
+      senderId: users[2].uid,
+      senderName: users[2].displayName,
+      senderPhotoUrl: users[2].photoUrl,
+      type: NotificationType.follow,
+      message: '${users[2].displayName} started following you',
+      isRead: true,
+      createdAt: DateTime.now().subtract(const Duration(days: 1)),
+    ),
+  ];
+  
+  static final List<CommentModel> comments = [
+    CommentModel(
+      id: 'dummy_c1',
+      postId: 'dummy_p1',
+      authorId: users[1].uid,
+      authorName: users[1].displayName,
+      authorUsername: users[1].username,
+      authorPhotoUrl: users[1].photoUrl,
+      content: 'Looks amazing! What monitor is that?',
+      createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
+    ),
+    CommentModel(
+      id: 'dummy_c2',
+      postId: 'dummy_p1',
+      authorId: users[2].uid,
+      authorName: users[2].displayName,
+      authorUsername: users[2].username,
+      authorPhotoUrl: users[2].photoUrl,
+      content: 'Super clean setup bro 🔥',
+      createdAt: DateTime.now().subtract(const Duration(minutes: 15)),
+    ),
+  ];
+}

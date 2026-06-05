@@ -4,7 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../core/app_theme.dart';
 import '../../core/constants.dart';
 import '../../models/user_model.dart';
-import 'user_profile_screen.dart';
+import '../../utils/dummy_data.dart';
+import '../profile/user_profile_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -100,20 +101,23 @@ class _SearchScreenState extends State<SearchScreen> {
     }
 
     if (!_hasSearched) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.search_rounded,
-                size: 72, color: AppTheme.textSecondary),
-            const SizedBox(height: 16),
-            Text('Find people to connect with',
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text('Suggested Users',
                 style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 8),
-            const Text('Search by username to discover people',
-                style: TextStyle(color: AppTheme.textSecondary)),
-          ],
-        ),
+          ),
+          Expanded(
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              itemCount: DummyData.users.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 4),
+              itemBuilder: (_, i) => _UserTile(user: DummyData.users[i]),
+            ),
+          ),
+        ],
       );
     }
 

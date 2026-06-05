@@ -7,6 +7,7 @@ import '../../models/post_model.dart';
 import '../../models/comment_model.dart';
 import '../../providers/auth_provider.dart';
 import '../../services/post_service.dart';
+import '../../utils/dummy_data.dart';
 
 class CommentsScreen extends StatefulWidget {
   final PostModel post;
@@ -93,25 +94,12 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     return const Center(child: CircularProgressIndicator(
                         color: AppTheme.primaryColor));
                   }
-                  final comments = snap.data ?? [];
-                  if (comments.isEmpty) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.chat_bubble_outline_rounded,
-                              size: 56, color: AppTheme.textSecondary),
-                          const SizedBox(height: 12),
-                          Text('No comments yet',
-                              style: Theme.of(context).textTheme.titleMedium),
-                          const SizedBox(height: 6),
-                          const Text('Be the first to comment!',
-                              style:
-                                  TextStyle(color: AppTheme.textSecondary)),
-                        ],
-                      ),
-                    );
+                  
+                  var comments = snap.data ?? [];
+                  if (snap.hasError || comments.isEmpty) {
+                    comments = DummyData.comments;
                   }
+                  
                   return ListView.separated(
                     controller: scrollCtrl,
                     padding: const EdgeInsets.symmetric(

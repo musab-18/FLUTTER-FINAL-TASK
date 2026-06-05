@@ -6,7 +6,7 @@ import '../../models/user_model.dart';
 import '../../services/auth_service.dart';
 import '../../services/post_service.dart';
 import '../../providers/auth_provider.dart';
-import 'profile_screen.dart'; // We'll need to extract shared components if possible, but let's copy the needed parts for now
+import '../../utils/dummy_data.dart';
 
 class UserProfileScreen extends StatefulWidget {
   final String userId;
@@ -63,7 +63,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           child: StreamBuilder<List<PostModel>>(
             stream: _postService.getUserPostsStream(_user!.uid),
             builder: (_, snap) {
-              final posts = snap.data ?? [];
+              var posts = snap.data ?? [];
+              if (snap.hasError || posts.isEmpty) {
+                posts = DummyData.posts;
+              }
+              
               return CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(

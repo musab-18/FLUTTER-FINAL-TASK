@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 import '../../core/app_theme.dart';
 import '../../models/post_model.dart';
 import '../../providers/auth_provider.dart';
-import '../../providers/post_provider.dart';
 import '../../services/post_service.dart';
 import '../../models/user_model.dart';
+import '../../utils/dummy_data.dart';
 import '../post/create_post_screen.dart';
 import '../settings/settings_screen.dart';
 import 'edit_profile_screen.dart';
@@ -45,38 +45,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: StreamBuilder<List<PostModel>>(
             stream: _postService.getUserPostsStream(user.uid),
             builder: (_, snap) {
-              final posts = snap.data ?? [];
+              var posts = snap.data ?? [];
+              if (snap.hasError || posts.isEmpty) {
+                posts = DummyData.posts;
+              }
+              
               return CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
                     child: _ProfileHeader(user: user, isOwn: true, posts: posts),
                   ),
-                  posts.isEmpty
-                      ? SliverFillRemaining(
-                          hasScrollBody: false,
-                          child: _EmptyPosts(onCreatePost: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => const CreatePostScreen()),
-                            );
-                          }),
-                        )
-                      : SliverPadding(
-                          padding: const EdgeInsets.all(2),
-                          sliver: SliverGrid(
-                            delegate: SliverChildBuilderDelegate(
-                              (_, i) => _PostGridTile(post: posts[i]),
-                              childCount: posts.length,
-                            ),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              crossAxisSpacing: 2,
-                              mainAxisSpacing: 2,
-                            ),
-                          ),
-                        ),
+                  SliverPadding(
+                    padding: const EdgeInsets.all(2),
+                    sliver: SliverGrid(
+                      delegate: SliverChildBuilderDelegate(
+                        (_, i) => _PostGridTile(post: posts[i]),
+                        childCount: posts.length,
+                      ),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 2,
+                        mainAxisSpacing: 2,
+                      ),
+                    ),
+                  ),
                 ],
               );
             },
@@ -250,38 +243,5 @@ class _PostGridTile extends StatelessWidget {
               style: const TextStyle(fontSize: 11, color: AppTheme.textPrimary),
             ),
           );
-  }
-}
-
-class _EmptyPosts extends StatelessWidget {
-  final VoidCallback onCreatePost;
-  const _EmptyPosts({required this.onCreatePost});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.photo_library_outlined,
-                size: 64, color: AppTheme.textSecondary),
-            const SizedBox(height: 16),
-            const Text('No posts yet',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 8),
-            const Text('Share your first post!',
-                style: TextStyle(color: AppTheme.textSecondary)),
-            const SizedBox(height: 20),
-            ElevatedButton.icon(
-              onPressed: onCreatePost,
-              icon: const Icon(Icons.add),
-              label: const Text('Create Post'),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
